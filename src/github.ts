@@ -1,6 +1,7 @@
 import { exec } from "child_process";
 import { existsSync } from "fs";
-import { dirname, isAbsolute, resolve } from "path";
+import { dirname, resolve } from "path";
+import { Octokit } from "octokit";
 
 export interface GitHubRepoInfo {
   owner: string;
@@ -32,4 +33,22 @@ export const guessGitHubRepoInfo = async (filePath: string): Promise<GitHubRepoI
   } else {
     throw new Error(`Could not parse GitHub URL: ${url}`);
   }
+}
+
+export const searchIssues = async (repoInfo: GitHubRepoInfo, keyword: string) => {
+  const octokit = await getOktoKitClient();
+  const { owner, repo } = repoInfo;
+  const response = await octokit.paginate(octokit.rest.issues.listForRepo, {
+    owner,
+    repo,
+    q: keyword,
+  });
+  return response;
+}
+
+const getOktoKitClient = async () => {
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_TOKEN,
+  });
+  return octokit;
 }
