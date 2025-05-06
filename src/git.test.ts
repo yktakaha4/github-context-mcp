@@ -30,6 +30,19 @@ describe("guessGitHubRepoInfo", () => {
 describe("getCommitHashes", () => {
   it("コミットハッシュが取得できる", async () => {
     const expected = await getCommitHashes(__filename);
-      expect(expected).toEqual([]);
+      expect(expected.length).toBeGreaterThan(0);
+  });
+
+  it("相対パスが解決される", async () => {
+    const expected = await getCommitHashes("./README.md");
+      expect(expected.length).toBeGreaterThan(0);
+  });
+
+  it("無効なパスでエラーが発生する", async () => {
+    await expect(getCommitHashes("invalid/path.txt")).rejects.toThrow(/^File path does not exist:/);
+  });
+
+  it("無効なパスでエラーが発生する", async () => {
+    await expect(getCommitHashes("/tmp/")).rejects.toThrow(/^failed to get git commit hashes:/);
   });
 });
