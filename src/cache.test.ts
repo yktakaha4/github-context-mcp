@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { ContentCache, IssueContent } from "./cache.js";
 import { mkdtempSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { ContentCache, IssueContent } from "./cache.js";
 
 describe("ContentCache", () => {
   let contentCache: ContentCache;

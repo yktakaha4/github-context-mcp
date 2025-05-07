@@ -3,6 +3,7 @@ import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { existsSync, mkdirSync, readFile, readFileSync, writeFileSync } from "fs";
 import { dirname, join, resolve } from "path";
 
+export type PullRequestNumbers = number[];
 export type IssueContent = RestEndpointMethodTypes["issues"]["listForRepo"]["response"]["data"][0];
 export type IssueCommentContent = RestEndpointMethodTypes["issues"]["listCommentsForRepo"]["response"]["data"][0];
 export type PullRequestContent = RestEndpointMethodTypes["pulls"]["list"]["response"]["data"][0];
@@ -41,6 +42,16 @@ export class ContentCache {
       mkdirSync(dirPath, { recursive: true });
     }
     writeFileSync(filePath, JSON.stringify(content), "utf-8");
+  }
+
+  public async getPullRequestNumbers(owner: string, repo: string, fileHashes: string[]) {
+    const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
+    return await this.get<PullRequestNumbers>(key);
+  }
+
+  public async setPullRequestNumbers(owner: string, repo: string, fileHashes: string[], numbers: PullRequestNumbers) {
+    const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
+    await this.set(key, numbers);
   }
 
   public async getIssue(owner: string, repo: string, number: number) {
