@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getCommitHashes, guessGitHubRepoInfo } from "./git";
+import { getCommitHashes, guessGitHubRepoInfo } from "./git.js";
 
 describe("guessGitHubRepoInfo", () => {
   it("GitHubのリポジトリ情報が取得できる", async () => {
@@ -31,6 +31,7 @@ describe("getCommitHashes", () => {
   it("コミットハッシュが取得できる", async () => {
     const expected = await getCommitHashes(__filename);
       expect(expected.length).toBeGreaterThan(0);
+      expect(expected[0]).toMatch(/^[0-9a-f]{7}$/);
   });
 
   it("相対パスが解決される", async () => {

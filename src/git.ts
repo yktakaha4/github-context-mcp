@@ -50,10 +50,8 @@ export const getCommitHashes = async (filePath: string): Promise<string[]> => {
     throw new Error(`File path does not exist: ${fileBaseDirectoryPath}`);
   }
 
-  console.log(fPath);
-
   const result = await new Promise<string>((resolve, reject) => {
-    exec(`git log --pretty=format:"%H" -- ${fPath}`, { cwd: fileBaseDirectoryPath }, (error, stdout) => {
+    exec(`git log --pretty=format:"%h" -- ${fPath}`, { cwd: fileBaseDirectoryPath }, (error, stdout) => {
       if (error) {
         reject(new Error(`failed to get git commit hashes: ${fileBaseDirectoryPath}`));
       } else {

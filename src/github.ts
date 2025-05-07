@@ -1,5 +1,5 @@
 import { Octokit } from "octokit";
-import { GitHubRepoInfo } from "./git";
+import { GitHubRepoInfo } from "./git.js";
 
 export const searchIssues = async (repoInfo: GitHubRepoInfo, keyword: string) => {
   const octokit = await getOktoKitClient();
