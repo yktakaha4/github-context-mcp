@@ -17,6 +17,9 @@ export class ContentCache {
     let basePath: string;
     if (cachePath) {
       basePath = resolve(cachePath);
+      if (!existsSync(basePath)) {
+        throw new Error(`Cache path does not exist: ${basePath}`);
+      }
     } else {
       basePath = resolve(join(__dirname, "../cache"));
       if (!existsSync(basePath)) {
