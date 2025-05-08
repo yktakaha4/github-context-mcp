@@ -104,6 +104,26 @@ export class ContentCache {
     const key = [owner, repo, "pull_requests", number, "comments"];
     await this.set(key, content);
   }
+
+  public async getPullRequestReviews(owner: string, repo: string, number: number) {
+    const key = [owner, repo, "pull_requests", number, "reviews"];
+    return await this.get<PullRequestReviewCommentContent[]>(key);
+  }
+
+  public async setPullRequestReviews(owner: string, repo: string, number: number, content: PullRequestReviewCommentContent[]) {
+    const key = [owner, repo, "pull_requests", number, "reviews"];
+    await this.set(key, content);
+  }
+
+  public async getPullRequestCommentsForReview(owner: string, repo: string, number: number, reviewId: number) {
+    const key = [owner, repo, "pull_requests", number, "reviews", reviewId, "comments"];
+    return await this.get<PullRequestReviewCommentContent[]>(key);
+  }
+
+  public async setPullRequestCommentsForReview(owner: string, repo: string, number: number, reviewId: number, content: PullRequestReviewCommentContent[]) {
+    const key = [owner, repo, "pull_requests", number, "reviews", reviewId, "comments"];
+    await this.set(key, content);
+  }
 }
 
 const globalCache = new ContentCache();
