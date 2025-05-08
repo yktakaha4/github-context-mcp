@@ -1,11 +1,15 @@
-import { getCache, PullRequestContent, PullRequestReviewCommentContent } from "./cache.js";
+import { getCache, PullRequestCommentForReviewContent, PullRequestContent, PullRequestReviewCommentContent, PullRequestReviewContent } from "./cache.js";
 import { getCommitHashes, guessGitHubRepoInfo } from "./git.js";
-import { getPullRequestReviewComments, searchPullRequests } from "./github.js";
+import { getPullRequestCommentsForReview, getPullRequestReviewComments, getPullRequestReviewes, searchPullRequests } from "./github.js";
 
 export interface ContextByFilePath {
   pulls: {
     pull: PullRequestContent;
     comments: PullRequestReviewCommentContent[];
+    reviews: {
+      review: PullRequestReviewContent;
+      comments: PullRequestCommentForReviewContent[];
+    }[];
   }[];
 }
 
@@ -32,11 +36,28 @@ export const getContextByFilePath = async (filePath: string): Promise<ContextByF
       if (!pullRequest) {
         continue;
       }
-      const reviewComments = await cache.getPullRequestReviewComments(repoInfo.owner, repoInfo.repo, pullRequest.number);
+
       context.pulls.push({
         pull: pullRequest,
-        comments: reviewComments || []
+        comments: [],
+        reviews: []
       });
+
+      const reviewComments = await cache.getPullRequestReviewComments(repoInfo.owner, repoInfo.repo, pullRequest.number);
+      if (reviewComments) {
+        context.pulls[context.pulls.length - 1].comments = reviewComments;
+      }
+
+      const reviews = await cache.getPullRequestReviews(repoInfo.owner, repoInfo.repo, pullRequest.number);
+      if (reviews) {
+        for (const review of reviews) {
+          const reviewCommentsForReview = await cache.getPullRequestCommentsForReview(repoInfo.owner, repoInfo.repo, pullRequest.number, review.id);
+          context.pulls[context.pulls.length - 1].reviews.push({
+            review,
+            comments: reviewCommentsForReview || []
+          });
+        }
+      }
     }
   } else {
     const query = hashes.join(" OR ");
@@ -49,6 +70,14 @@ export const getContextByFilePath = async (filePath: string): Promise<ContextByF
 
       const reviewComments = await getPullRequestReviewComments(repoInfo, pullRequest.number);
       await cache.setPullRequestReviewComments(repoInfo.owner, repoInfo.repo, pullRequest.number, reviewComments);
+
+      const reviews = await getPullRequestReviewes(repoInfo, pullRequest.number);
+      await cache.setPullRequestReviews(repoInfo.owner, repoInfo.repo, pullRequest.number, reviews);
+
+      for (const review of reviews) {
+        const reviewComments = await getPullRequestCommentsForReview(repoInfo, pullRequest.number, review.id);
+        await cache.setPullRequestCommentsForReview(repoInfo.owner, repoInfo.repo, pullRequest.number, review.id, reviewComments);
+      }
 
       context.pulls.push({
         pull: pullRequest,

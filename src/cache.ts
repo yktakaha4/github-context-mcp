@@ -27,7 +27,7 @@ export class ContentCache {
       if (!existsSync(basePath)) {
         mkdirSync(basePath, { recursive: true });
       }
-    }    
+    }
     this.basePath = basePath;
   }
 
