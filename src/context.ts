@@ -15,6 +15,12 @@ export const getContextByFilePath = async (filePath: string): Promise<ContextByF
   const repoInfo = await guessGitHubRepoInfo(filePath);
   const hashes = await getCommitHashes(filePath);
 
+  if (hashes.length === 0) {
+    return {
+      pulls: []
+    };
+  }
+
   const context: ContextByFilePath = {
     pulls: []
   };
