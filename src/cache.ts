@@ -8,6 +8,8 @@ export type IssueContent = RestEndpointMethodTypes["issues"]["listForRepo"]["res
 export type IssueCommentContent = RestEndpointMethodTypes["issues"]["listCommentsForRepo"]["response"]["data"][0];
 export type PullRequestContent = RestEndpointMethodTypes["pulls"]["list"]["response"]["data"][0];
 export type PullRequestReviewCommentContent = RestEndpointMethodTypes["pulls"]["listReviewCommentsForRepo"]["response"]["data"][0];
+export type PullRequestReviewContent = RestEndpointMethodTypes["pulls"]["listReviews"]["response"]["data"][0];
+export type PullRequestCommentForReviewContent = RestEndpointMethodTypes["pulls"]["listCommentsForReview"]["response"]["data"][0];
 export type CacheKey = string | number;
 
 export class ContentCache {
@@ -107,20 +109,20 @@ export class ContentCache {
 
   public async getPullRequestReviews(owner: string, repo: string, number: number) {
     const key = [owner, repo, "pull_requests", number, "reviews"];
-    return await this.get<PullRequestReviewCommentContent[]>(key);
+    return await this.get<PullRequestReviewContent[]>(key);
   }
 
-  public async setPullRequestReviews(owner: string, repo: string, number: number, content: PullRequestReviewCommentContent[]) {
+  public async setPullRequestReviews(owner: string, repo: string, number: number, content: PullRequestReviewContent[]) {
     const key = [owner, repo, "pull_requests", number, "reviews"];
     await this.set(key, content);
   }
 
   public async getPullRequestCommentsForReview(owner: string, repo: string, number: number, reviewId: number) {
     const key = [owner, repo, "pull_requests", number, "reviews", reviewId, "comments"];
-    return await this.get<PullRequestReviewCommentContent[]>(key);
+    return await this.get<PullRequestCommentForReviewContent[]>(key);
   }
 
-  public async setPullRequestCommentsForReview(owner: string, repo: string, number: number, reviewId: number, content: PullRequestReviewCommentContent[]) {
+  public async setPullRequestCommentsForReview(owner: string, repo: string, number: number, reviewId: number, content: PullRequestCommentForReviewContent[]) {
     const key = [owner, repo, "pull_requests", number, "reviews", reviewId, "comments"];
     await this.set(key, content);
   }
