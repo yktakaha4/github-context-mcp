@@ -68,8 +68,16 @@ export const getContextByFilePath = async (filePath: string): Promise<ContextByF
     for (const pullRequest of pullRequests) {
       await cache.setPullRequest(repoInfo.owner, repoInfo.repo, pullRequest.number, pullRequest);
 
+      context.pulls.push({
+        pull: pullRequest,
+        comments: [],
+        reviews: []
+      });
+
       const reviewComments = await getPullRequestReviewComments(repoInfo, pullRequest.number);
       await cache.setPullRequestReviewComments(repoInfo.owner, repoInfo.repo, pullRequest.number, reviewComments);
+
+      context.pulls[context.pulls.length - 1].comments = reviewComments;
 
       const reviews = await getPullRequestReviewes(repoInfo, pullRequest.number);
       await cache.setPullRequestReviews(repoInfo.owner, repoInfo.repo, pullRequest.number, reviews);
@@ -77,12 +85,11 @@ export const getContextByFilePath = async (filePath: string): Promise<ContextByF
       for (const review of reviews) {
         const reviewComments = await getPullRequestCommentsForReview(repoInfo, pullRequest.number, review.id);
         await cache.setPullRequestCommentsForReview(repoInfo.owner, repoInfo.repo, pullRequest.number, review.id, reviewComments);
+        context.pulls[context.pulls.length - 1].reviews.push({
+          review,
+          comments: reviewComments
+        });
       }
-
-      context.pulls.push({
-        pull: pullRequest,
-        comments: reviewComments || []
-      });
     }
   }
   return context;
