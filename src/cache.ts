@@ -46,7 +46,7 @@ export class ContentCache {
     if (!existsSync(dirPath)) {
       mkdirSync(dirPath, { recursive: true });
     }
-    writeFileSync(filePath, JSON.stringify(content), "utf-8");
+    writeFileSync(filePath, JSON.stringify(content, null, 2), "utf-8");
   }
 
   public async getPullRequestNumbers(owner: string, repo: string, fileHashes: string[]) {
