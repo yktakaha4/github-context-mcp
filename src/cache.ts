@@ -41,6 +41,8 @@ export class ContentCache {
   private async set<T>(keys: CacheKey[], content: T) {
     const filePath = join(this.basePath, ...keys.map((key) => key.toString()));
     const dirPath = dirname(filePath);
+    console.log(filePath);
+    console.log(dirPath);
     if (!existsSync(dirPath)) {
       mkdirSync(dirPath, { recursive: true });
     }
@@ -54,6 +56,7 @@ export class ContentCache {
 
   public async setPullRequestNumbers(owner: string, repo: string, fileHashes: string[], numbers: PullRequestNumbers) {
     const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
+    console.log(key, numbers);
     await this.set(key, numbers);
   }
 
