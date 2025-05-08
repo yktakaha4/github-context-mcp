@@ -1,14 +1,12 @@
-import { mkdtempSync } from "fs";
-import { tmpdir } from "os";
-import { join } from "path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ContentCache, IssueContent } from "./cache.js";
+import { createTempDirectory } from "./helper.js";
 
 describe("ContentCache", () => {
   let contentCache: ContentCache;
 
   beforeEach(() => {
-    const tempPath = mkdtempSync(join(tmpdir(), "github-context-mcp-"));
+    const tempPath = createTempDirectory();
     contentCache = new ContentCache(tempPath);
   });
 
