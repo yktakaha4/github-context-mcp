@@ -48,6 +48,29 @@ export const getPullRequestReviewComments = async (repoInfo: GitHubRepoInfo, pul
   return response;
 }
 
+export const getPullRequestReviewes = async (repoInfo: GitHubRepoInfo, pullRequestNumber: number) => {
+  const octokit = await getOktoKitClient();
+  const { owner, repo } = repoInfo;
+  const response = await octokit.paginate(octokit.rest.pulls.listReviews, {
+    owner,
+    repo,
+    pull_number: pullRequestNumber,
+  });
+  return response;
+}
+
+export const getPullRequestCommentsForReview = async (repoInfo: GitHubRepoInfo, pullRequestNumber: number, reviewId: number) => {
+  const octokit = await getOktoKitClient();
+  const { owner, repo } = repoInfo;
+  const response = await octokit.paginate(octokit.rest.pulls.listCommentsForReview, {
+    owner,
+    repo,
+    pull_number: pullRequestNumber,
+    review_id: reviewId,
+  });
+  return response;
+}
+
 const getOktoKitClient = async () => {
   const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
