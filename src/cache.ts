@@ -30,7 +30,7 @@ export class ContentCache {
   }
 
   private async get<T>(keys: CacheKey[]): Promise<T | null> {
-    const filePath = join(this.basePath, ...keys.map((key) => key.toString()));
+    const filePath = join(this.basePath, ...keys.map((key) => key.toString())) + ".json";
     if (existsSync(filePath)) {
       return JSON.parse(readFileSync(filePath, "utf-8")) as T;
     } else {
@@ -39,10 +39,8 @@ export class ContentCache {
   }
 
   private async set<T>(keys: CacheKey[], content: T) {
-    const filePath = join(this.basePath, ...keys.map((key) => key.toString()));
+    const filePath = join(this.basePath, ...keys.map((key) => key.toString())) + ".json";
     const dirPath = dirname(filePath);
-    console.log(filePath);
-    console.log(dirPath);
     if (!existsSync(dirPath)) {
       mkdirSync(dirPath, { recursive: true });
     }
@@ -50,13 +48,20 @@ export class ContentCache {
   }
 
   public async getPullRequestNumbers(owner: string, repo: string, fileHashes: string[]) {
+    if (fileHashes.length === 0) {
+      throw new Error("File hashes cannot be empty");
+    }
+
     const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
     return await this.get<PullRequestNumbers>(key);
   }
 
   public async setPullRequestNumbers(owner: string, repo: string, fileHashes: string[], numbers: PullRequestNumbers) {
+    if (fileHashes.length === 0) {
+      throw new Error("File hashes cannot be empty");
+    }
+
     const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
-    console.log(key, numbers);
     await this.set(key, numbers);
   }
 

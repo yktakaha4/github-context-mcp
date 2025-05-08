@@ -12,13 +12,16 @@ export const searchIssues = async (repoInfo: GitHubRepoInfo, keyword: string) =>
   return response;
 }
 
-export const searchPullRequests = async (repoInfo: GitHubRepoInfo, keyword: string) => {
+export const searchPullRequests = async (repoInfo: GitHubRepoInfo, q: string) => {
   const octokit = await getOktoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.pulls.list, {
     owner,
     repo,
-    q: keyword,
+    q,
+    state: "all",
+    sort: "updated",
+    direction: "desc",
   });
   return response;
 }

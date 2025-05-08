@@ -5,10 +5,10 @@ import { createTempDirectory } from "./helper.js";
 
 describe("getContextByFileHash", () => {
   beforeEach(() => {
-    vi.spyOn(cache, "getCache").mockImplementation(() => {
-      const tempDir = createTempDirectory();
-      return new cache.ContentCache(tempDir);
-    });
+    // vi.spyOn(cache, "getCache").mockImplementation(() => {
+    //   const tempDir = createTempDirectory();
+    //   return new cache.ContentCache(tempDir);
+    // });
   });
 
   it("should return the correct context for the given file path", async () => {
