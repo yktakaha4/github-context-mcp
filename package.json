@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "test:e2e": "RUN_E2E_TESTS=1 vitest"
   },
   "keywords": [],
   "author": "",

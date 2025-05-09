@@ -2,7 +2,7 @@ import { Octokit } from "octokit";
 import { GitHubRepoInfo } from "./git.js";
 
 export const searchIssues = async (repoInfo: GitHubRepoInfo, keyword: string) => {
-  const octokit = await getOktoKitClient();
+  const octokit = await getOctoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.issues.listForRepo, {
     owner,
@@ -13,7 +13,7 @@ export const searchIssues = async (repoInfo: GitHubRepoInfo, keyword: string) =>
 }
 
 export const searchPullRequests = async (repoInfo: GitHubRepoInfo, q: string) => {
-  const octokit = await getOktoKitClient();
+  const octokit = await getOctoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.pulls.list, {
     owner,
@@ -27,7 +27,7 @@ export const searchPullRequests = async (repoInfo: GitHubRepoInfo, q: string) =>
 }
 
 export const getIssueComments = async (repoInfo: GitHubRepoInfo, issueNumber: number) => {
-  const octokit = await getOktoKitClient();
+  const octokit = await getOctoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.issues.listCommentsForRepo, {
     owner,
@@ -38,7 +38,7 @@ export const getIssueComments = async (repoInfo: GitHubRepoInfo, issueNumber: nu
 }
 
 export const getPullRequestReviewComments = async (repoInfo: GitHubRepoInfo, pullRequestNumber: number) => {
-  const octokit = await getOktoKitClient();
+  const octokit = await getOctoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.pulls.listReviewCommentsForRepo, {
     owner,
@@ -49,7 +49,7 @@ export const getPullRequestReviewComments = async (repoInfo: GitHubRepoInfo, pul
 }
 
 export const getPullRequestReviewes = async (repoInfo: GitHubRepoInfo, pullRequestNumber: number) => {
-  const octokit = await getOktoKitClient();
+  const octokit = await getOctoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.pulls.listReviews, {
     owner,
@@ -60,7 +60,7 @@ export const getPullRequestReviewes = async (repoInfo: GitHubRepoInfo, pullReque
 }
 
 export const getPullRequestCommentsForReview = async (repoInfo: GitHubRepoInfo, pullRequestNumber: number, reviewId: number) => {
-  const octokit = await getOktoKitClient();
+  const octokit = await getOctoKitClient();
   const { owner, repo } = repoInfo;
   const response = await octokit.paginate(octokit.rest.pulls.listCommentsForReview, {
     owner,
@@ -71,7 +71,7 @@ export const getPullRequestCommentsForReview = async (repoInfo: GitHubRepoInfo, 
   return response;
 }
 
-const getOktoKitClient = async () => {
+export const getOctoKitClient = async () => {
   const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
   });
