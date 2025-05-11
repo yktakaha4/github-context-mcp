@@ -6,7 +6,8 @@
   "scripts": {
     "server": "tsx src/index.ts",
     "test": "vitest",
-    "test:e2e": "RUN_E2E_TESTS=1 vitest"
+    "test:e2e": "RUN_E2E_TESTS=1 vitest",
+    "inspector": "npx @modelcontextprotocol/inspector ./bin/github-context-mcp"
   },
   "keywords": [],
   "author": "",

@@ -4,4 +4,6 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+
+$HOME/.nodenv/shims/npm install --silent
 $HOME/.nodenv/shims/npm run --silent server
