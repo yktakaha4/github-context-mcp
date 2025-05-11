@@ -3,6 +3,7 @@ import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { existsSync, mkdirSync, readFile, readFileSync, writeFileSync } from "fs";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
+import { createMD5Hash } from "./helper.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,7 +59,7 @@ export class ContentCache {
       throw new Error("File hashes cannot be empty");
     }
 
-    const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
+    const key = [owner, repo, "file_path_hashes", createMD5Hash(fileHashes.join("-"))];
     return await this.get<PullRequestNumbers>(key);
   }
 
@@ -67,7 +68,7 @@ export class ContentCache {
       throw new Error("File hashes cannot be empty");
     }
 
-    const key = [owner, repo, "file_path_hashes", fileHashes.join("-")];
+    const key = [owner, repo, "file_path_hashes", createMD5Hash(fileHashes.join("-"))];
     await this.set(key, numbers);
   }
 
