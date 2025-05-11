@@ -5,7 +5,7 @@
         "type": "promptString",
         "description": "Enter your GitHub token",
         "default": "",
-        "id": "token",
+        "id": "github-token",
         "password": true
       },
     ],
@@ -14,7 +14,7 @@
         "command": "${workspaceFolder}/bin/github-context-mcp",
         "args": [],
         "env": {
-          "GITHUB_TOKEN": "${input:token}",
+          "GITHUB_TOKEN": "${input:github-token}",
         }
       }
     }
