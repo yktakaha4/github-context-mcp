@@ -1,0 +1,25 @@
+{
+  "mcp": {
+    "inputs": [
+      {
+        "type": "promptString",
+        "description": "Enter your GitHub token",
+        "default": "",
+        "id": "token",
+        "password": true
+      },
+    ],
+    "servers": {
+      "github-context-mcp": {
+        "command": "npm",
+        "args": [
+          "run",
+          "server",
+        ],
+        "env": {
+          "GITHUB_TOKEN": "${input:token}",
+        }
+      }
+    }
+  }
+}
