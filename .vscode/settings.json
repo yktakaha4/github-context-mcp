@@ -11,11 +11,8 @@
     ],
     "servers": {
       "github-context-mcp": {
-        "command": "npm",
-        "args": [
-          "run",
-          "server",
-        ],
+        "command": "${workspaceFolder}/bin/github-context-mcp",
+        "args": [],
         "env": {
           "GITHUB_TOKEN": "${input:token}",
         }
