@@ -2,6 +2,10 @@ import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 
 import { existsSync, mkdirSync, readFile, readFileSync, writeFileSync } from "fs";
 import { dirname, join, resolve } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export type PullRequestNumbers = number[];
 export type IssueContent = RestEndpointMethodTypes["issues"]["listForRepo"]["response"]["data"][0];
