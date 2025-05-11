@@ -5,6 +5,8 @@ import { createTempDirectory, isE2ETest } from "./helper.js";
 
 describe("getContextByFileHash", () => {
   beforeEach(() => {
+    vi.resetAllMocks();
+
     vi.spyOn(cache, "getCache").mockImplementation(() => {
       const tempDir = createTempDirectory();
       return new cache.ContentCache(tempDir);

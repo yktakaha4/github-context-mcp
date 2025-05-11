@@ -1,6 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { getCommitHashes, guessGitHubRepoInfo } from "./git.js";
+import { getContextByFilePath } from "./context.js";
+import { describeContextByFilePath } from "./describe.js";
  
 export const server = new McpServer({
   name: "DiceRoller",
@@ -8,18 +11,36 @@ export const server = new McpServer({
 });
 
 server.tool(
-  "getDiceRoll",
-  "Roll a dice with a specified number of sides and return the result.",
-  // ツールの引数を定義するスキーマ
-  { sides: z.number().min(1).describe("Number of sides on the die") },
-  async ({ sides }) => {
-    const roll = Math.floor(Math.random() * sides) + 1;
-    
+  "getContextByFilePath",
+  "Get context by file path",
+  { filePath: z.string().describe("file path") },
+  async ({ filePath }) => {
+    const context = await getContextByFilePath(filePath);
+    if (context.pulls.length === 0) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No context found for the file",
+            metadata: {
+              filePath,
+            },
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    const text = describeContextByFilePath(context);
+
     return {
       content: [
         {
           type: "text",
-          text: roll.toString(),
+          text,
+          metadata: {
+            filePath,
+          },
         },
       ],
     };
